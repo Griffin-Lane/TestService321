@@ -10,6 +10,6 @@ RUN pip3 install -r requirements.txt
 
 COPY . .
 
-EXPOSE 8080
+EXPOSE 8000
 
 ENTRYPOINT ["./entrypoint.sh"]
