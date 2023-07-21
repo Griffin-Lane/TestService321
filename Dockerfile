@@ -11,6 +11,5 @@ RUN pip3 install -r requirements.txt
 COPY . .
 
 EXPOSE 50505
-EXPOSE 80
 
-ENTRYPOINT ["gunicorn", "app:get_app()"]
+ENTRYPOINT ["/entrypoint.sh"]
