@@ -1,7 +1,26 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
+import os, typing
+os.system("pip install gradio")
+
+import gradio as gr
 
 app = FastAPI()
+
+def ask(question="howdy?"):
+    response = [{
+        "score":0,
+        "title":question,
+        "text":"testing123"
+        }]  
+    return response
+
+def chatbot(conversation):
+    new_message = "using a hardcoded string" #ask(conversation)
+    resp = ask(new_message)
+    #return "User: " + conversation + "\n\nSystem: " + new_message + "\n\n"
+    return resp
+
 
 
 class Request(BaseModel):
@@ -20,10 +39,28 @@ class Response(BaseModel):
 
 @app.post("/predict", response_model=Response)
 async def predict_api(request: Request):
-    results = predict(request.question)
+    results = ask(request.question)
     return Response(
         results=[
             Result(score=r["score"], title=r["title"], text=r["text"])
             for r in results
         ]
     )
+
+
+# with gr.Blocks() as app:
+#     chat = gr.Chatbot()
+#     msg = gr.Textbox()
+#     app.launch()
+
+demo = gr.Interface(
+    fn=chatbot,
+    inputs=gr.Textbox(
+        label="Ask a question", placeholder="What is the capital of France?"
+    ),
+    outputs=[gr.Textbox(label="Answer"), gr.Number(label="Score")],
+    allow_flagging="never",
+)
+
+# demo.launch()
+app = gr.mount_gradio_app(app, demo, path="/")
