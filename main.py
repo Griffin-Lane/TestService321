@@ -3,12 +3,27 @@ from pydantic import BaseModel
 
 app = FastAPI()
 
-#class Response(BaseModel):
-#	results:typing.list[Result]
+
+class Request(BaseModel):
+    question: str
+
+
+class Result(BaseModel):
+    score: float
+    title: str
+    text: str
+
+
+class Response(BaseModel):
+    results: typing.List[Result] # list of Result objects
+
 
 @app.post("/predict", response_model=Response)
-async def predict_api(request:Request):
-	#results = predict(request.question)
-	return "yay"
-
-
+async def predict_api(request: Request):
+    results = predict(request.question)
+    return Response(
+        results=[
+            Result(score=r["score"], title=r["title"], text=r["text"])
+            for r in results
+        ]
+    )
