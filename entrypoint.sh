@@ -3,4 +3,4 @@
 
 #!/bin/bash
 
-uvicorn --host 0.0.0.0 --port $PORT app:get_app()
+uvicorn --host 0.0.0.0 --port $PORT app:app

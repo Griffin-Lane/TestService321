@@ -71,6 +71,5 @@ demo = gr.Interface(
     allow_flagging="never",
 )
 
-def get_app():
-    app = gr.mount_gradio_app(app, demo, path="/")
-    return app
+
+app = gr.mount_gradio_app(app, demo, path="/")
