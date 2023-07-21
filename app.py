@@ -3,9 +3,10 @@ import typing
 from fastapi import FastAPI
 from pydantic import BaseModel
 import gradio as gr
+from a2wsgi import ASGIMiddleware
 
 # from predict import predict
-app = FastAPI()
+fast_app = FastAPI()
 
 def predict(query: str):
     # Encode the query using the bi-encoder and find potentially relevant passages
@@ -41,7 +42,7 @@ class Response(BaseModel):
     results: typing.List[Result]
 
 
-@app.post("/predict", response_model=Response)
+@fast_app.post("/predict", response_model=Response)
 async def predict_api(request: Request):
     results = predict(request.question)
     return Response(
@@ -72,4 +73,5 @@ demo = gr.Interface(
 )
 
 
-app = gr.mount_gradio_app(app, demo, path="/")
+gr_app = gr.mount_gradio_app(fast_app, demo, path="/")
+app = ASGIMiddleware(gr_app)
