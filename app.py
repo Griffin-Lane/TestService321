@@ -17,7 +17,7 @@ import json
 
 BEARER_TOKEN: str = os.environ.get("BEARER_TOKEN")
 GENAI_DATA_ASK_API_ENDPOINT: str = os.environ.get("GENAI_DATA_ASK_API_ENDPOINT")
-assert BEARER_TOKEN != None
+#assert BEARER_TOKEN != None
 #assert GENAI_DATA_ASK_API_ENDPOINT != None
 
 from pydantic import BaseModel
