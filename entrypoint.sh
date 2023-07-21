@@ -3,4 +3,4 @@
 
 #!/bin/bash
 
-gunicorn -k uvicorn.workers.UvicornWorker --port $PORT app:app
+gunicorn -k uvicorn.workers.UvicornWorker --port $WEBSITES_PORT app:app
