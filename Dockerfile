@@ -12,4 +12,5 @@ COPY . .
 
 EXPOSE 8000
 
-ENTRYPOINT ["./entrypoint.sh"]
+
+ENTRYPOINT ["gunicorn", "app:app",  "--bind", "0.0.0.0:$PORT", "--worker-class", "uvicorn.workers.UvicornWorker"]
