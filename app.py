@@ -151,7 +151,7 @@ if __name__ == "__main__":
     # #iface.launch(share=True)
     # iface.launch()
     
-    with gr.Blocks() as demo:
+    with gr.Blocks() as app:
         chat = gr.Chatbot()
         msg = gr.Textbox()
         #clear = gr.ClearButton([msg, chat])
@@ -162,7 +162,7 @@ if __name__ == "__main__":
         #     return "", chat_history
         
         # msg.submit(respond, [msg, chat], [msg, chat])
-        demo.launch()
+        app.launch()
     
     #while True:
         #user_query = input("Enter your question: ")
