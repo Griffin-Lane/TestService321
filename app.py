@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import logging
-import openai
+#import openai
 #from chat_utils import ask
 import os
 import gradio as gr
