@@ -10,6 +10,6 @@ RUN pip3 install -r requirements.txt
 
 COPY . .
 
-EXPOSE 50505
+EXPOSE $WEBSITES_PORT 
 
 ENTRYPOINT ["./entrypoint.sh"]
