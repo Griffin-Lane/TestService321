@@ -1,26 +1,30 @@
+import typing
+
 from fastapi import FastAPI
 from pydantic import BaseModel
-import os, typing
-os.system("pip install gradio")
-
 import gradio as gr
 
+# from predict import predict
 app = FastAPI()
 
-def ask(question="howdy?"):
-    response = [{
-        "score":0,
-        "title":question,
-        "text":"testing123"
-        }]  
-    return response
+def predict(query: str):
+    # Encode the query using the bi-encoder and find potentially relevant passages
+    hits=[1,2,3]
+    results = [
+        {
+            "score": 0,
+            "title": query,
+            "text": f"testing{hit}",
+        }
+        for hit in hits
+    ]
 
-def chatbot(conversation):
-    new_message = "using a hardcoded string" #ask(conversation)
-    resp = ask(new_message)
-    #return "User: " + conversation + "\n\nSystem: " + new_message + "\n\n"
-    return resp
+    print("\n\n========\n")
 
+    return results
+
+
+# --- fastapi /predict route ---
 
 
 class Request(BaseModel):
@@ -34,27 +38,32 @@ class Result(BaseModel):
 
 
 class Response(BaseModel):
-    results: typing.List[Result] # list of Result objects
+    results: typing.List[Result]
 
 
 @app.post("/predict", response_model=Response)
 async def predict_api(request: Request):
-    results = ask(request.question)
+    results = predict(request.question)
     return Response(
         results=[
-            Result(score=r["score"], title=r["title"], text=r["text"])
-            for r in results
+            Result(score=r["score"], title=r["title"], text=r["text"]) for r in results
         ]
     )
 
 
-# with gr.Blocks() as app:
-#     chat = gr.Chatbot()
-#     msg = gr.Textbox()
-#     app.launch()
+# --- gradio demo ---
+
+
+def gradio_predict(question: str):
+    results = predict(question)
+
+    best_result = results[0]
+
+    return f"{best_result['title']}\n\n{best_result['text']}", best_result["score"]
+
 
 demo = gr.Interface(
-    fn=chatbot,
+    fn=gradio_predict,
     inputs=gr.Textbox(
         label="Ask a question", placeholder="What is the capital of France?"
     ),
@@ -62,5 +71,6 @@ demo = gr.Interface(
     allow_flagging="never",
 )
 
-# demo.launch()
-app = gr.mount_gradio_app(app, demo, path="/")
+def get_app():
+    app = gr.mount_gradio_app(app, demo, path="/")
+    return app
