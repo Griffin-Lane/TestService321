@@ -12,4 +12,4 @@ COPY . .
 
 EXPOSE 50505
 
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["./entrypoint.sh"]
